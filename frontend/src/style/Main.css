@@ -1,0 +1,38 @@
+main{
+    padding : 30px 30px 10px;
+}
+
+.add-ingredient-form {
+    display: flex;
+    justify-content: center;
+    gap:12px;
+    height: 40px;
+}
+
+.add-ingredient-form > input {
+    border-radius: 6px;
+    border : 1px solid #d1d5db;
+    padding : 9px 13px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+    min-width: 150px;
+    max-width: 400px;
+}
+
+
+.add-ingredient-form > button {
+    border-radius: 6px;
+    border: none;
+    background-color: #141413;
+    color: #f7f7f7;
+    flex-grow: 1;
+    max-width: 150px;
+    min-width: 50px;
+    font-size: 0.895rem;
+    font-weight: 500;
+}
+.add-ingredient-form > button::before{
+    content: "+";
+    margin-right: 7px;
+}
+
