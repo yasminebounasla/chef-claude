@@ -1,11 +1,12 @@
 import "../style/Main.css";
 import { useState } from "react";
-import { ClaudeRecipe } from "./claudeRecipe.jsx";
-import { IngredientsLists } from "./ingredientsList.jsx";
+import { ClaudeRecipe } from "./ClaudeRecipe.jsx";
+import { IngredientsLists } from "./IngredientsList.jsx";
+import { getRecipeFromMistral } from "../utils/ai.js";
 
 export const Main = () => {
     const [ingredients, setIngredient] = useState([]);
-    const [recipeShown, setRecipeShown] =useState(false);
+    const [recipe, setRecipe] =useState("");
     
     const addIngredient = (formData) => {
         const newIngredient = formData.get("ingredient");
@@ -17,8 +18,9 @@ export const Main = () => {
         
     };
 
-    const toggleRecipeShwon = ()=> {
-        setRecipeShown( prev => !prev )
+    const getRecipe = async() => {
+       const generatedRecipe = await getRecipeFromMistral(ingredients);
+       setRecipe(generatedRecipe);
     }
     
     return (
@@ -36,10 +38,10 @@ export const Main = () => {
                 <button>Add ingredient</button>
             </form>
 
-            { ingredients.length > 0 && <IngredientsLists  ingredients={ingredients} handleClick={toggleRecipeShwon}/>}
+            { ingredients.length > 0 && <IngredientsLists  ingredients={ingredients} handleClick={getRecipe}/>}
 
 
-            {recipeShown &&  <ClaudeRecipe /> }
+            {recipe &&  <ClaudeRecipe recipe={recipe}/> }
             
         </main>
     );

@@ -1,18 +1,12 @@
-export const ClaudeRecipe = () => {
+import ReactMarkDown from "react-markdown"
+
+export const ClaudeRecipe = (props) => {
     return(
-        <section>
-            <h2>Chef Claude Recommends:</h2>
-            <p>Based on the ingredients you have available, I would recommend {}. Here is the recipe:</p>
-
-            <h3>Beef Bolognese Pasta</h3>
-            <ul>
-                <li></li>
-            </ul>
-
-            <h3>Instructions:</h3>
-            <ol>
-                <li></li>
-            </ol>
+        <section className="suggested-recipe-container" aria-live = "polite">
+            <h2 style={{color: "black"}}>Chef Claude Recommends :</h2>
+            <ReactMarkDown>
+                {props.recipe}
+            </ReactMarkDown>
         </section> 
     )
 }
