@@ -60,3 +60,47 @@ export const register = async (req, res) => {
         });
     }
 };
+
+
+export const login = async (req, res) => {
+    const {email , password } = req.body;
+
+    try {
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            return res.status(500).json({ 
+                message: "JWT_SECRET is not configured" 
+            });
+        }
+
+        const userExist =await User.findOne({
+            email : email.trim().toLowerCase()
+        })
+
+        if(!userExist) {
+            return res.status(400).json({
+                message : "User not found"
+            })
+        }
+
+        const validPassword = await bcrypt.compare(password, userExist.password);
+        if(!validPassword) {
+            return res.status(400).json({
+                 message : "Invalid password"
+            })
+        }
+
+        const token = jwt.sign({ userId: userExist._id, name: userExist.name }, jwtSecret, { expiresIn: "1h" });
+
+        res.status(201).json({
+            message: "User login successfully",
+            data : {userExist, token}
+        })
+
+    } catch(err) {
+        res.status(500).json({
+            message: "Login user failed",
+            error: err.message
+        })
+    }
+}
