@@ -1,6 +1,6 @@
 import express from "express";
-import { getHistory, addToHistory, clearHistory, deleteHistory, addToFavorite, toggleFavorite, removeFavorite, getFavorites} from "../controllers/recipeControllers";
-import { auth } from "../middleware/auth";
+import { getHistory, addToHistory, clearHistory, deleteHistory, addToFavorite, toggleFavorite, removeFavorite, getFavorites} from "../controllers/recipeControllers.js";
+import { auth } from "../middleware/auth.js";
 
 const router = express.Router()
 
