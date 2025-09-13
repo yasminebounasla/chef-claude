@@ -84,7 +84,7 @@ export const login = async (req, res) => {
         const validPassword = await bcrypt.compare(password, userExist.password);
         if(!validPassword) {
             return res.status(400).json({
-                 message : "Invalid password"
+                message : "Invalid password"
             });
         }
 
@@ -109,7 +109,7 @@ export const getProfile = async (req, res) => {
     try {
         
         const userId = req.user.id;
-        const profile = await User.findById(userId).select('-password');
+        const profile = await User.findById(userId).select('name email createdAt');
         
         if (!profile) {
             return res.status(404).json({
@@ -118,12 +118,18 @@ export const getProfile = async (req, res) => {
         }
         
         res.status(200).json({
-            message: "Display profile successfully",
-            data: profile
+            message: "Profile retrieved successfully",
+            data: {
+                id: profile._id,
+                name: profile.name,
+                email: profile.email,
+                memberSince: profile.createdAt
+            }
         });
+
     } catch (err) {
         res.status(500).json({
-            message: "Fetch data failed",
+            message: "Failed to fetch profile",
             error: err.message
         });
     }
@@ -133,19 +139,22 @@ export const getProfile = async (req, res) => {
 export const deleteProfile = async (req, res) => {
     try {
         const userId = req.user.id;
+        const { password } = req.body;
         
-        const deletedProfile = await User.findByIdAndDelete(userId);
-        
-        if (!deletedProfile) {
-            return res.status(404).json({
-                message: "Profile not found"
-            });
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Password incorrect" });
+        }
+
+        await User.findByIdAndDelete(userId);
         
-        res.status(200).json({
-            message: "Profile deleted successfully",
-            data: { id: deletedProfile._id, name: deletedProfile.name }
-        });
+        res.status(200).json({ message: "Account deleted successfully" });
+
     } catch (err) {
         res.status(500).json({
             message: "Delete profile failed",
@@ -159,15 +168,42 @@ export const editProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         
-        const { password, _id, __v, ...updateData } = req.body;
-        
+        const { name, email } = req.body;
+        const updates = {};
+
+        if (name !== undefined) {
+            if (!name.trim()) {
+                return res.status(400).json({ message: "Name cannot be empty" });
+            }
+            updates.name = name.trim(); 
+        }
+
+        if (email !== undefined) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({ message: "Invalid email format" });
+            }
+
+            // Check if email is already taken by another user
+            const existingUser = await User.findOne({ 
+                email: email.trim().toLowerCase(),
+                _id: { $ne: userId } 
+            });
+
+            if (existingUser) {
+                return res.status(400).json({ message: "Email already in use" });
+            }
+            
+            updates.email = email.trim().toLowerCase(); 
+        }
+
         const updatedProfile = await User.findByIdAndUpdate(
             userId,
-            updateData,
+            updates,
             { 
                 new: true,
                 runValidators: true,
-                select: '-password' 
+                select: 'name email createdAt'
             }
         );
         
@@ -178,13 +214,69 @@ export const editProfile = async (req, res) => {
         }
         
         res.status(200).json({
-            message: "Profile edited successfully",
-            data: updatedProfile
+            message: "Profile updated successfully",
+            data: {
+                id: updatedProfile._id,
+                name: updatedProfile.name,
+                email: updatedProfile.email,
+                memberSince: updatedProfile.createdAt
+            }
         });
+
     } catch (err) {
         res.status(500).json({
-            message: "Failed updating the profile",
+            message: "Failed to update profile",
             error: err.message
         });
     }
 };
+
+export const changePassword =async  (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+        if(newPassword !== confirmNewPassword) {
+            return res.status(400).json({
+                message : "Passwords don't match"
+            })
+        }
+
+        const user = await User.findById(userId);
+        if(!user) {
+            return res.status(404).json({
+                message : "user not found"
+            })
+        }
+
+        const validPassword = await bcrypt.compare(currentPassword, user.password);
+        if(!validPassword){
+            return res.status(401).json({
+                message: "Current password incorrect"
+            })
+        }
+
+        const passwordErr = validatePassword(newPassword);
+        if(passwordErr) {
+            return res.status(400).json({
+                message : passwordErr
+            })
+        }
+
+        const samepassword = await bcrypt.compare(newPassword, user.password);
+        if(samepassword) {
+            return res.status(400).json({ message: "New password must be different" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.findByIdAndUpdate( userId, { password: hashedPassword });
+
+        res.status(200).json({ message: "Password updated successfully" });
+
+    } catch(err) {
+        res.status(500).json({
+            message : "Failed to change password", 
+            error : err.message
+        })
+    }
+}
