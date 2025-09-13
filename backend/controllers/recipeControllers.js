@@ -168,7 +168,7 @@ export const removeFavorite = async (req, res) => {
         
         const updatedRecipe = await Recipe.findOneAndUpdate(
             {
-                _id: recipeId,
+                recipeId:parseInt(recipeId),
                 userId
             },
             { isFavorite: false },
