@@ -1,15 +1,32 @@
 import mongoose from "mongoose";
-import User from "./userModel";
+import User from "./userModel.js";
+import { getNextSequence } from "./counterModel.js";
 
 const recipeSchema = new mongoose.Schema({
-    userId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : User,
+    recipeId: {
+        type: Number,
+        unique: true
+    },
+    
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User,
         required: true   
     },
-    recipe : String,
-    isFavorite :  { type: Boolean, default : false}
+    recipe: String,
+    isFavorite: { type: Boolean, default: false }
 
-} , { timestamps: true });
+}, { timestamps: true });
+
+recipeSchema.pre('save', async function(next) {
+    if (!this.isNew) return next();
+    
+    try {
+        this.recipeId = await getNextSequence('recipe');
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default mongoose.model("Recipe", recipeSchema);
