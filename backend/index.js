@@ -4,6 +4,7 @@ import authRouter from "./routes/auth.js";
 import recipeRouter from "./routes/recipe.js";
 import mongoose from 'mongoose';
 import cors from "cors";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(errorHandler);
 
 app.get("/", (_, res) => {
     res.json({message :"Chef claude server is running !"})
