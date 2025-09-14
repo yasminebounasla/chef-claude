@@ -1,18 +1,18 @@
 import { z, ZodError } from "zod";
 
-export const validateRequest = (schema) => {
+export const validateRequest = (schema, source = 'body') => {
   return (req, res, next) => {
     try {
-      // Check if req.body exists
-      if (!req.body || typeof req.body !== 'object') {
+      const dataToValidate = req[source]; // body, query, params
+      if (!dataToValidate || typeof dataToValidate !== 'object') {
         return res.status(400).json({
-          message: "Request body is required",
-          errors: [{ field: "body", message: "Request body cannot be empty" }]
+          message: `Request ${source} is required`,
+          errors: [{ field: source, message: `Request ${source} cannot be empty` }]
         });
       }
-      const validatedData = schema.parse(req.body);
-      req.body = validatedData;
-     
+      
+      const validatedData = schema.parse(dataToValidate);
+      req[source] = validatedData; 
       next();
 
     } catch (error) {
