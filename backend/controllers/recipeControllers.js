@@ -1,60 +1,53 @@
 import Recipe from "../models/recipeModel.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { sendResponse } from "../utils/response.js"; 
+import { AppError } from "../utils/AppError.js"; 
 
-export const getHistory =  catchAsync(async (req, res, next) => {
-    const userId = req.user.id; 
-    
+export const getHistory = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+   
     const recipes = await Recipe.find({ userId });
-    
-    res.status(200).json({
-        message: recipes.length > 0 ? "History fetched successfully" : "Empty History",
-        data: recipes
-    });
+   
+    const message = recipes.length > 0 ? "History fetched successfully" : "Empty History";
+    sendResponse(res, 200, true, message, recipes);
 });
 
-export const addToHistory = catchAsync(async (req, res) => {
-    const userId = req.user.id; 
+export const addToHistory = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
     const recipe = await Recipe.create({
         userId,
         recipe: req.body.recipe,
         isFavorite: req.body.isFavorite || false
     });
-    
-    res.status(201).json({
-        message: "Recipe added to history successfully",
-        data: recipe
-    });
+   
+    sendResponse(res, 201, true, "Recipe added to history successfully", recipe);
 });
  
-export const deleteHistory = catchAsync(async (req, res) => {
+export const deleteHistory = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const recipeId = req.params.recipeId;
-    
+   
     const deletedRecipe = await Recipe.findOneAndDelete({
         _id: recipeId,
-        userId 
+        userId
     });
-    
-    if(!deletedRecipe){
-        return res.status(404).json({
-            message: "Recipe not found or doesn't belong to you"
-        });
+   
+    if (!deletedRecipe) {
+        return next(new AppError("Recipe not found or doesn't belong to you", 404));
     }
-    
-    res.status(200).json({
-        message: "Recipe deleted successfully",
-        data: deletedRecipe
-    });
+   
+    sendResponse(res, 200, true, "Recipe deleted successfully", deletedRecipe);
 });
 
 export const clearHistory = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const result = await Recipe.deleteMany({ userId });
-    
-    res.status(200).json({
-        message: `Cleared ${result.deletedCount} recipes from history`,
+   
+    const responseData = {
         deletedCount: result.deletedCount
-    });
+    };
+
+    sendResponse(res, 200, true, `Cleared ${result.deletedCount} recipes from history`, responseData);
 });
 
 export const addToFavorite = catchAsync(async (req, res, next) => {
@@ -64,35 +57,28 @@ export const addToFavorite = catchAsync(async (req, res, next) => {
         recipe: req.body.recipe,
         isFavorite: true
     });
-    
-    res.status(201).json({
-        message: "Recipe added to favorites successfully",
-        data: favoriteRecipe
-    });
+   
+    sendResponse(res, 201, true, "Recipe added to favorites successfully", favoriteRecipe);
 });
 
 export const toggleFavorite = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const recipeId = req.params.recipeId;
-    
+   
     const recipe = await Recipe.findOne({
         _id: recipeId,
         userId
     });
-    
-    if(!recipe){
-        return res.status(404).json({
-            message: "Recipe not found or doesn't belong to you"
-        });
+   
+    if (!recipe) {
+        return next(new AppError("Recipe not found or doesn't belong to you", 404));
     }
-    
+   
     recipe.isFavorite = !recipe.isFavorite;
     await recipe.save();
-    
-    res.status(200).json({
-        message: `Recipe ${recipe.isFavorite ? 'added to' : 'removed from'} favorites`,
-        data: recipe
-    });
+   
+    const message = `Recipe ${recipe.isFavorite ? 'added to' : 'removed from'} favorites`;
+    sendResponse(res, 200, true, message, recipe);
 });
 
 export const getFavorites = catchAsync(async (req, res, next) => {
@@ -101,34 +87,27 @@ export const getFavorites = catchAsync(async (req, res, next) => {
         userId,
         isFavorite: true
     });
-    
-    res.status(200).json({
-        message: favoriteRecipes.length > 0 ? "Favorites fetched successfully" : "No favorite recipes",
-        data: favoriteRecipes
-    });
+   
+    const message = favoriteRecipes.length > 0 ? "Favorites fetched successfully" : "No favorite recipes";
+    sendResponse(res, 200, true, message, favoriteRecipes);
 });
 
 export const removeFavorite = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const recipeId = req.params.recipeId;
-    
+   
     const updatedRecipe = await Recipe.findOneAndUpdate(
         {
-            recipeId:parseInt(recipeId),
+            recipeId: parseInt(recipeId), 
             userId
         },
         { isFavorite: false },
         { new: true }
     );
-    
-    if(!updatedRecipe){
-        return res.status(404).json({
-            message: "Recipe not found or doesn't belong to you"
-        });
+   
+    if (!updatedRecipe) {
+        return next(new AppError("Recipe not found or doesn't belong to you", 404));
     }
-    
-    res.status(200).json({
-        message: "Recipe removed from favorites successfully",
-        data: updatedRecipe
-    });
+   
+    sendResponse(res, 200, true, "Recipe removed from favorites successfully", updatedRecipe);
 });

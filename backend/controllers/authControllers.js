@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/AppError.js";
+import { sendResponse } from "../utils/response.js"; 
 
 export const register = catchAsync(async (req, res, next) => {
     const { email, password, name } = req.body;
@@ -31,11 +32,7 @@ export const register = catchAsync(async (req, res, next) => {
     const token = jwt.sign({ userId: user._id, name: user.name }, jwtSecret, { expiresIn: "1h" });
     user.password = undefined;
 
-    res.status(201).json({
-        status: 'success',
-        message: "User registered successfully",
-        data: { user, token }
-    });
+    sendResponse(res, 201, true, "User registered successfully", { user, token });
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -62,11 +59,7 @@ export const login = catchAsync(async (req, res, next) => {
     const token = jwt.sign({ userId: userExist._id, name: userExist.name }, jwtSecret, { expiresIn: "1h" });
     userExist.password = undefined;
 
-    res.status(200).json({
-        status: 'success',
-        message: "User login successfully",
-        data: { user: userExist, token }
-    });
+    sendResponse(res, 200, true, "User login successfully", { user: userExist, token });
 });
 
 export const getProfile = catchAsync(async (req, res, next) => {
@@ -77,16 +70,14 @@ export const getProfile = catchAsync(async (req, res, next) => {
         return next(new AppError("Profile not found", 404));
     }
     
-    res.status(200).json({
-        status: 'success',
-        message: "Profile retrieved successfully",
-        data: {
-            id: profile._id,
-            name: profile.name,
-            email: profile.email,
-            memberSince: profile.createdAt
-        }
-    });
+    const profileData = {
+        id: profile._id,
+        name: profile.name,
+        email: profile.email,
+        memberSince: profile.createdAt
+    };
+
+    sendResponse(res, 200, true, "Profile retrieved successfully", profileData);
 });
 
 export const deleteProfile = catchAsync(async (req, res, next) => {
@@ -105,10 +96,7 @@ export const deleteProfile = catchAsync(async (req, res, next) => {
 
     await User.findByIdAndDelete(userId);
     
-    res.status(200).json({ 
-        status: 'success',
-        message: "Account deleted successfully" 
-    });
+    sendResponse(res, 200, true, "Account deleted successfully");
 });
 
 export const editProfile = catchAsync(async (req, res, next) => {
@@ -148,16 +136,14 @@ export const editProfile = catchAsync(async (req, res, next) => {
         return next(new AppError("Profile not found", 404));
     }
     
-    res.status(200).json({
-        status: 'success',
-        message: "Profile updated successfully",
-        data: {
-            id: updatedProfile._id,
-            name: updatedProfile.name,
-            email: updatedProfile.email,
-            memberSince: updatedProfile.createdAt
-        }
-    });
+    const profileData = {
+        id: updatedProfile._id,
+        name: updatedProfile.name,
+        email: updatedProfile.email,
+        memberSince: updatedProfile.createdAt
+    };
+
+    sendResponse(res, 200, true, "Profile updated successfully", profileData);
 });
 
 export const changePassword = catchAsync(async (req, res, next) => {
@@ -182,8 +168,5 @@ export const changePassword = catchAsync(async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await User.findByIdAndUpdate(userId, { password: hashedPassword });
 
-    res.status(200).json({ 
-        status: 'success',
-        message: "Password updated successfully" 
-    });
+    sendResponse(res, 200, true, "Password updated successfully");
 });
