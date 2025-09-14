@@ -15,7 +15,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(express.json()); // ✅ Keep this here
+app.use(express.json()); 
 
 app.get("/", (_, res) => {
   res.json({message: "Chef claude server is running!"});
@@ -25,8 +25,7 @@ app.get("/", (_, res) => {
 app.use("/api/recipe", recipeRouter);
 app.use("/api/auth", authRouter);
 
-// Error handler should be AFTER all routes
-app.use(errorHandler); // ✅ Move this to the end
+app.use(errorHandler); 
 
 const startServer = async () => {
   try {
