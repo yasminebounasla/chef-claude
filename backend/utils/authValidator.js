@@ -61,7 +61,7 @@ export const editProfileValidation = z.object({
   return data.email !== undefined || data.name !== undefined;
 }, {
   message: "At least one field (email or name) must be provided",
-  path: ["root"] // Changed from ["email"] to be more accurate
+  path: ["root"] 
 });
 
 export const deleteProfileValidation = z.object({

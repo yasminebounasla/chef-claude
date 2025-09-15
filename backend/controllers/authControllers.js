@@ -148,7 +148,7 @@ export const editProfile = catchAsync(async (req, res, next) => {
 
 export const changePassword = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
-    const { currentPassword, newPassword } = req.body;
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
     const user = await User.findById(userId);
     if (!user) {
