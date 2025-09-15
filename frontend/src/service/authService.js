@@ -1,4 +1,4 @@
-import { authFetch, BASE_URL } from "../utils/api";
+import { authFetch, BASE_URL } from "../utils/api.js";
 
 export const loginUser = async (email, password) => {
     return authFetch(`${BASE_URL}/auth/login`, {

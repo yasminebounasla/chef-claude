@@ -1,4 +1,4 @@
-import { authFetch, BASE_URL } from "../utils/api";
+import { authFetch, BASE_URL } from "../utils/api.js";
 
 export const getHistory = async () => {
     return authFetch(`${BASE_URL}/recipe/history`, { method : "GET"}, token)
@@ -23,6 +23,12 @@ export const deleteHistory = async (recipeId) => {
 export const clearHistory = async () => {
     return authFetch(`${BASE_URL}/recipe/history`, {
         method : "DELETE"
+    }, token)
+}
+
+export const getFavorite = async () => {
+    return authFetch(`${BASE_URL}/recipe/favorites`, {
+        method : "GET"
     }, token)
 }
 
