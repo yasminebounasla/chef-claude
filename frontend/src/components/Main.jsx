@@ -31,12 +31,11 @@ export const Main = () => {
     const getRecipe = async() => {
        const generatedRecipe = await getRecipeFromMistral(ingredients);
        setRecipe(generatedRecipe);
-       setIsFavorited(false); // Reset favorite state for new recipe
+       setIsFavorited(false); 
     }
 
     const handleAddToFavorites = () => {
         setIsFavorited(!isFavorited);
-        // Add your logic here to save/remove from favorites
     }
    
     return (

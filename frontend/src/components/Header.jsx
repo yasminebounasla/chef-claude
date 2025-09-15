@@ -1,18 +1,16 @@
 import { useState } from "react";
 import "../style/Header.css";
 
-export const Header = (handleFavorites, handleHistory) => {
+export const Header = ({ handleFavorites, handleHistory }) => { 
     const [menuOpen, setMenuOpen] = useState(false);
-
+    
     return (
         <header className="header">
-            {/* Left: Menu with hamburger icon */}
             <div
                 className="menu-container"
                 onMouseEnter={() => setMenuOpen(true)}
                 onMouseLeave={() => setMenuOpen(false)}
             >
-                {/* Hamburger Icon */}
                 <div className="hamburger-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -20,8 +18,7 @@ export const Header = (handleFavorites, handleHistory) => {
                         <line x1="3" y1="18" x2="21" y2="18"/>
                     </svg>
                 </div>
-                
-                {/* Dropdown menu */}
+               
                 {menuOpen && (
                     <div className="dropdown-menu">
                         <button className="dropdown-item" onClick={handleHistory}>
@@ -40,14 +37,10 @@ export const Header = (handleFavorites, handleHistory) => {
                     </div>
                 )}
             </div>
-
-            {/* Center: Logo */}
             <div className="logo">
-                <img src="/chef-claude-icon.png" alt="chef-claude-icon"  className="header-icon"/>
+                <img src="/chef-claude-icon.png" alt="chef-claude-icon" className="header-icon"/>
                 <h1 className="header-title">Chef Claude</h1>
             </div>
-
-            {/* Right: Auth buttons */}
             <div className="btns">
                 <button className="signIn-btn">Sign In</button>
                 <button className="signUp-btn">Sign Up</button>
