@@ -110,11 +110,43 @@ ol > li {
 }
 
 .add-favorites-btn:hover {
-    border-color: #D17557;
+    border-color: #c22f2f;
     background-color: #fef7f0;
-    color: #D17557;
+    color: #c22f2f;
 }
 
 .add-favorites-btn:hover svg {
-    color: #D17557;
+    color: #c22f2f;
+}
+
+/* Add these styles to your existing Main.css file */
+
+/* Favorited state */
+.add-favorites-btn.favorited {
+    border-color: #c22f2f;
+    background-color: #c22f2f;
+    color: white;
+}
+
+.add-favorites-btn.favorited:hover {
+    border-color: #c22f2f;
+    background-color: #c22f2f;
+    color: white;
+}
+
+.add-favorites-btn.favorited svg {
+    color: white;
+}
+
+.add-favorites-btn.favorited:hover svg {
+    color: white;
+}
+
+/* Smooth heart animation */
+.add-favorites-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.add-favorites-btn:active svg {
+    transform: scale(1.1);
 }
