@@ -1,22 +1,27 @@
-import { useState, useEffect } from "react";
-import { getHistory, getFavorite } from "../service/recipeService.js"; 
-import "../style/List.css"
+import { useState, useEffect, useContext } from "react";
+import { getHistory, getFavorite, deleteHistory, removeFavorite, clearHistory } from "../service/recipeService.js"; 
+import "../style/List.css";
+import { AuthContext } from "../contexts/authContext.jsx";
 
 export const List = ({ type, onClose }) => { 
     const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [showRecipe, setShowRecipe] = useState(false);
+    const { loading, setLoading } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let data;
+                let response;
                 if (type === "history") {
-                    data = await getHistory();
-                } else {
-                    data = await getFavorite(); 
+                    response = await getHistory();
+                } else if (type === "favorite") {
+                    response = await getFavorite(); 
                 }
-                setItems(data);
+
+                const itemsData = response.data || response;  
+                setItems(Array.isArray(itemsData) ? itemsData : []);
+
             } catch (error) {
                 console.error('Failed to fetch data:', error);
                 setItems([]);
@@ -27,9 +32,53 @@ export const List = ({ type, onClose }) => {
         fetchData();
     }, [type]);
 
+    const handleDelete = async (id) => {
+        try {
+            if (type === "history") {
+                await deleteHistory(id);
+                setItems((prev) => prev.filter((item) => item._id !== id));
+            } else {
+                await removeFavorite(id);
+                setItems((prev) => prev.filter((item) => item._id !== id));
+            }
+        } catch (err) {
+            console.error("Delete failed:", err);
+        }
+    };
+
+    const handleClear = async () => {
+        try {
+            await clearHistory();
+            setItems([]); 
+        } catch (err) {
+            console.error("Failed to clear history:", err);
+        }
+    };
+
+    const handleRecipeClick = (recipe) => {
+        onRecipeClick(recipe); 
+    };
+    
+    const extractTitle = (text = "") => {
+        if (!text) return "Untitled Recipe";
+
+        const ingIndex = text.indexOf("Ingredients");
+        let title = ingIndex > 0 
+            ? text.slice(0, ingIndex).trim().split("\n").pop()
+            : text.split("\n").find(line => line.trim() !== "") || "";
+
+        title = title.replace(/[*#_`>~]/g, "").trim();
+
+        if (title.length > 0) {
+            title = title.charAt(0).toUpperCase() + title.slice(1);
+        }
+
+        return title || "Untitled Recipe";
+    };
+
     return (
-        <div className="list-overlay">
-            <div className="list-container">
+        <div className="list-overlay" onClick={onClose}>
+            <div className="list-container" onClick={(e) => e.stopPropagation()}>
                 <div className="list-header">
                     <h2 className="list-title">
                         {type === "history" ? "Recipe History" : "Favorite Recipes"}
@@ -51,22 +100,44 @@ export const List = ({ type, onClose }) => {
                         </div>
                     ) : (
                         <div className="items-list">
-                            {items.map((item) => (
-                                <div key={item.id} className="item-card">
-                                    <div className="item-info">
-                                        <h3 className="item-name">{item.recipe?.name || item.name}</h3>
-                                        <p className="item-date">{new Date(item.createdAt || item.date).toLocaleDateString()}</p>
-                                    </div>
+                        {items.map((item) => (
+                            <div 
+                                key={item._id} 
+                                className="item-card"
+                                onClick={() => handleRecipeClick(item.recipe || item.text || "")} 
+                            > 
+                                <div className="item-info">
+                                    <h3 className="item-name">
+                                        {extractTitle(item.recipe || item.text || "")}
+                                    </h3>
+                                    <p className="item-date">
+                                        {new Date(item.createdAt || item.date).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                { type==="history" && (
                                     <div className="item-actions">
-                                        <button className="delete-btn">
+                                        <button 
+                                            className="delete-btn" 
+                                            onClick={(e) => {
+                                                e.stopPropagation(); 
+                                                handleDelete(item._id);
+                                            }}
+                                        >
                                             Delete
                                         </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                    </div> 
+                                )}
+                            </div>
+                        ))}
+                    </div>
                     )}
                 </div>
+
+                {type === "history" && items.length > 0 && (
+                    <button className="clear-btn" onClick={handleClear}>
+                        Clear History
+                    </button>
+                )}
             </div>
         </div>
     );
