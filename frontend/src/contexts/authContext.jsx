@@ -1,19 +1,19 @@
 import { useState, useEffect, createContext } from "react";
-import { loginUser, registerUser } from "../service/authService";
-import { decodeJWT, isTokenExpired } from "../utils/auth";
+import { loginUser, registerUser } from "../service/authService.js";
+import { decodeJWT, isTokenExpired } from "../utils/auth.js";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
-
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const checkAuth = () => {
             try {
                 const token = localStorage.getItem('token');
-                if (!token && token.trim() !== "" && token !== "null" && token !== "undefined") {
+                
+                if (token && token.trim() !== "" && token !== "null" && token !== "undefined") {
                     if (isTokenExpired(token)) {
                         localStorage.removeItem("token");
                         setUser(null);
@@ -24,13 +24,13 @@ export const AuthProvider = ({children}) => {
                     if(decoded) {
                         const userInfo = {
                             id: decoded.id || decoded.userId || decoded.sub,
-                            name: decoded.name || decoded.username || `${decoded.firstName} ${decoded.lastName}` || "User",
+                            name: decoded.name || decoded.username || `${decoded.firstName || ''} ${decoded.lastName || ''}`.trim() || "User",
                             email: decoded.email,
                             initials: (decoded.name || decoded.username || "UN")
-                            .split(" ")
-                            .map(n => n[0])
-                            .join("")
-                            .toUpperCase()
+                                .split(" ")
+                                .map(n => n[0])
+                                .join("")
+                                .toUpperCase()
                         };
                         setUser(userInfo);
                     } else {
@@ -44,7 +44,6 @@ export const AuthProvider = ({children}) => {
                 console.error("Error checking authentication:", error);
                 localStorage.removeItem("token");
                 setUser(null);
-
             } finally {
                 setLoading(false);
             }
@@ -52,13 +51,18 @@ export const AuthProvider = ({children}) => {
         checkAuth();
     }, []);
 
-    //login funtion
-
+    // Login function
     const login = async (email, password) => {
         setLoading(true);
         try {
             const response = await loginUser(email, password);
-            const {token , user: userData} = response.data;
+            
+            const data = response.data || response;
+            const {token, user: userData} = data;
+
+            if (!token) {
+                throw new Error("No token received from server");
+            }
 
             localStorage.setItem("token", token);
 
@@ -68,10 +72,10 @@ export const AuthProvider = ({children}) => {
                 email: userData.email,
                 role: userData.role,
                 initials: (userData.name || "UN")
-                .split(" ")
-                .map(n => n[0])
-                .join("")
-                .toUpperCase()
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")
+                    .toUpperCase()
             };
 
             setUser(userInfo);
@@ -79,21 +83,25 @@ export const AuthProvider = ({children}) => {
 
         } catch (err) {
             console.error("Login error:", err);
-            return { success: false, message: err.message || "Login failed" };
-
+            const errorMessage = err.response?.data?.message || err.message || "Login failed";
+            return { success: false, message: errorMessage };
         } finally {
             setLoading(false);
         }
     }
 
-    //Register function 
-
+    // Register function 
     const register = async (email, password, confirmPassword, name) => {
         setLoading(true);
 
         try {
             const response = await registerUser(email, password, confirmPassword, name);
-            const {token, user: registeredUser} = response.data;
+            const data = response.data || response;
+            const {token, user: registeredUser} = data;
+
+            if (!token) {
+                throw new Error("No token received from server");
+            }
 
             localStorage.setItem('token', token);
 
@@ -103,25 +111,25 @@ export const AuthProvider = ({children}) => {
                 email: registeredUser.email,
                 role: registeredUser.role,
                 initials: (registeredUser.name || "UN")
-                .split(" ")
-                .map(n => n[0])
-                .join("")
-                .toUpperCase()
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")
+                    .toUpperCase()
             };
 
             setUser(userInfo);
-             return { success: true };
+            return { success: true };
 
         } catch(err) {
             console.error("Registration error:", err);
-            return { success: false, message: err.message || "Registration failed" };
-
+            const errorMessage = err.response?.data?.message || err.message || "Registration failed";
+            return { success: false, message: errorMessage };
         } finally {
             setLoading(false);
         }
     }
 
-    //logout function
+    // Logout function
     const logout = () => {
         localStorage.removeItem("token");
         setUser(null);
@@ -129,17 +137,17 @@ export const AuthProvider = ({children}) => {
 
     return (
         <AuthContext.Provider
-        value={{ 
-            user, 
-            login, 
-            register, 
-            logout, 
-            loading, 
-            setLoading,
-            isAuthenticated: !!user
-        }}
+            value={{ 
+                user, 
+                login, 
+                register, 
+                logout, 
+                loading, 
+                setLoading,
+                isAuthenticated: !!user
+            }}
         >
-        {children}
+            {children}
         </AuthContext.Provider>
     );
 }
