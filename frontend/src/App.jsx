@@ -1,17 +1,29 @@
 import './App.css'
 import { Header } from './components/Header.jsx';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Main } from './components/Main.jsx';
 import { List } from './components/List.jsx';
 import { LoginForm } from './components/loginForm.jsx';
 import { RegisterForm } from './components/registerForm.jsx';
-import { AuthProvider } from './contexts/authContext.jsx';
+import { AuthContext } from './contexts/authContext.jsx';
 
 function App() {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [showLoginForm, setShowLoginForm] = useState(true); 
+  const [showLoginForm, setShowLoginForm] = useState(false); 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+
+  const { isAuthenticated } = useContext(AuthContext);
+   
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowLoginForm(false);
+      setShowRegisterForm(false);
+    } else {
+      setShowLoginForm(true);
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = () => {
     setShowLoginForm(true);
@@ -24,7 +36,6 @@ function App() {
     setShowRegisterForm(true);
     setShowFavorites(false);
     setShowLoginForm(false);
-    setShowFavorites(false);
   }
 
   const handleFavorites = () => {
@@ -49,21 +60,19 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <div className="app">
-        <Header 
-          handleFavorites={handleFavorites} 
-          handleHistory={handleHistory} 
-          handleLogin={handleLogin}
-          handleRegister={handleRegister}
-        />
-        <Main />
-        {showLoginForm && <LoginForm onClose={close} handleRegister={handleRegister}/>}
-        {showHistory && <List type="history" onClose={close}/>}
-        {showFavorites && <List type="favorites" onClose={close}/>}
-        {showRegisterForm && <RegisterForm onClose={close} handleLogin={handleLogin} />}
-      </div>
-    </AuthProvider>
+    <div className="app">
+      <Header 
+        handleFavorites={handleFavorites} 
+        handleHistory={handleHistory} 
+        handleLogin={handleLogin}
+        handleRegister={handleRegister}
+      />
+      <Main />
+      {showLoginForm && <LoginForm onClose={close} handleRegister={handleRegister}/>}
+      {showHistory && <List type="history" onClose={close}/>}
+      {showFavorites && <List type="favorite" onClose={close}/>} 
+      {showRegisterForm && <RegisterForm onClose={close} handleLogin={handleLogin} />}
+    </div>
   )
 }
 
