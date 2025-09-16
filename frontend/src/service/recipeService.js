@@ -1,12 +1,22 @@
 import { authFetch, BASE_URL } from "../utils/api.js";
 
+// Get token from localStorage 
+const getToken = () => {
+    return localStorage.getItem('token');
+};
+
 export const getHistory = async () => {
-    return authFetch(`${BASE_URL}/recipe/history`, { method : "GET"}, token)
+    const token = getToken();
+    return authFetch(`${BASE_URL}/recipe/history`, { method: "GET" }, token);
 }
 
 export const addToHistory = async (recipe, isFavorite = false) => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/history`, {
         method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             recipe,
             isFavorite
@@ -15,41 +25,50 @@ export const addToHistory = async (recipe, isFavorite = false) => {
 }
 
 export const deleteHistory = async (recipeId) => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/history/${recipeId}`, {
-        method : "DELETE"
-    }, token)
+        method: "DELETE"
+    }, token);
 }
 
 export const clearHistory = async () => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/history`, {
-        method : "DELETE"
-    }, token)
+        method: "DELETE"
+    }, token);
 }
 
 export const getFavorite = async () => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/favorites`, {
-        method : "GET"
-    }, token)
+        method: "GET"
+    }, token);
 }
 
 export const addToFavorite = async (recipe, isFavorite = true) => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/favorites`, {
         method: "POST",
-        body : JSON.stringify({
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
             recipe,
             isFavorite
         })
-    }, token)
+    }, token);
 }
 
 export const toggleFavorite = async (recipeId) => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/favorites/${recipeId}/toggle`, {
-        method : "PUT"
-    }, token)
+        method: "PUT"
+    }, token);
 }
 
 export const removeFavorite = async (recipeId) => {
+    const token = getToken();
     return authFetch(`${BASE_URL}/recipe/favorites/${recipeId}`, {
-        method : "DELETE"
-    }, token)
+        method: "DELETE"
+    }, token);
 }
