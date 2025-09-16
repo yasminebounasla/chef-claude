@@ -141,3 +141,111 @@
 .dropdown-item:hover .item-icon {
     color: #333;
 }
+
+
+/* Right Section */
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Avatar Circle */
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.avatar-circle:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+/* User Menu Dropdown */
+.user-menu-container {
+    position: relative;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 101%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    min-width: 150px;
+    animation: slideDown 0.2s ease-out;
+    z-index: 1000;
+}
+
+.user-dropdown .dropdown-item {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-dropdown .dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+/* Right section buttons */
+.right-section button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+/* Sign In button */
+.signIn-btn {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    box-shadow: 1px 1px 10px rgb(186, 186, 186);
+}
+
+.signIn-btn:hover {
+    background-color: rgb(28, 28, 28);
+    box-shadow: 2px 2px 8px rgb(133, 133, 133);
+}
+
+/* Sign Up button */
+.signUp-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(102, 102, 102);
+}
+
+.signUp-btn:hover {
+    box-shadow: 1px 1px 8px rgb(191, 191, 191);
+}
+
+
+.dropdown-item.logout:hover {
+  background-color: #ffecec;
+  color: #d32f2f;           
+}
+
+.dropdown-item.logout:hover .item-icon {
+  color: #d32f2f;          
+}
+
