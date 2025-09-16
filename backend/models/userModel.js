@@ -4,7 +4,7 @@ import { getNextSequence } from "./counterModel.js";
 const userSchema = new mongoose.Schema({
     userId: {
         type: Number,
-        unique: true
+        unique: true 
     },
    
     name: {
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true,   
         lowercase: true,
         trim: true
     },
@@ -48,8 +48,6 @@ userSchema.pre('save', async function(next) {
     }
 });
 
-userSchema.index({ email: 1 });
-userSchema.index({ userId: 1 });
-userSchema.index({ createdAt: -1 });
+userSchema.index({ createdAt: -1 });  
 
 export default mongoose.model('User', userSchema);
