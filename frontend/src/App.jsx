@@ -6,6 +6,7 @@ import { List } from './components/List.jsx';
 import { LoginForm } from './components/loginForm.jsx';
 import { RegisterForm } from './components/registerForm.jsx';
 import { AuthContext } from './contexts/authContext.jsx';
+import { ClaudeRecipe } from './components/ClaudeRecipe.jsx';
 
 function App() {
   const [showFavorites, setShowFavorites] = useState(false);
@@ -13,8 +14,9 @@ function App() {
   const [showLoginForm, setShowLoginForm] = useState(false); 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
+  const [selectedRecipe, setSelectedRecipe] = useState(null); 
+
   const { isAuthenticated } = useContext(AuthContext);
-   
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -30,34 +32,34 @@ function App() {
     setShowFavorites(false);
     setShowHistory(false);
     setShowRegisterForm(false);
-  }
+  };
 
   const handleRegister = () => {
     setShowRegisterForm(true);
     setShowFavorites(false);
     setShowLoginForm(false);
-  }
+  };
 
   const handleFavorites = () => {
     setShowFavorites(true);
     setShowHistory(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
-  }
+  };
 
   const handleHistory = () => {
     setShowHistory(true);
     setShowFavorites(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
-  }
+  };
 
   const close = () => {
     setShowFavorites(false);
     setShowHistory(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
-  }
+  };
 
   return (
     <div className="app">
@@ -68,10 +70,13 @@ function App() {
         handleRegister={handleRegister}
       />
       <Main />
+
       {showLoginForm && <LoginForm onClose={close} handleRegister={handleRegister}/>}
-      {showHistory && <List type="history" onClose={close}/>}
-      {showFavorites && <List type="favorite" onClose={close}/>} 
+      {showHistory && <List type="history" onClose={close} onRecipeClick={setSelectedRecipe}/>}
+      {showFavorites && <List type="favorite" onClose={close} onRecipeClick={setSelectedRecipe}/>} 
       {showRegisterForm && <RegisterForm onClose={close} handleLogin={handleLogin} />}
+
+      {selectedRecipe && <ClaudeRecipe recipe={selectedRecipe} />}
     </div>
   )
 }
