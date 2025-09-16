@@ -6,7 +6,7 @@ import { AppError } from "../utils/AppError.js";
 import { sendResponse } from "../utils/response.js"; 
 
 export const register = catchAsync(async (req, res, next) => {
-    const { email, password, name } = req.body;
+   const { email, password, confirmPassword, name } = req.body;
     
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
