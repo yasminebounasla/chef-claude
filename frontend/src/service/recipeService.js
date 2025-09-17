@@ -1,6 +1,5 @@
 import { authFetch, BASE_URL } from "../utils/api.js";
 
-// Get token from localStorage 
 const getToken = () => {
     return localStorage.getItem('token');
 };
