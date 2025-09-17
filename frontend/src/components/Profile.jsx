@@ -11,7 +11,7 @@ export const Profile = ({ onClose, onChangePassword }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
-  const { loading, setLoading } = useContext(AuthContext);
+  const { loading, setLoading, logout } = useContext(AuthContext);
 
   // fetch profile on mount
   useEffect(() => {
@@ -102,6 +102,7 @@ export const Profile = ({ onClose, onChangePassword }) => {
     
     try {
       await deleteProfile(deletePassword);
+      logout();
       alert("Your account has been deleted.");
       onClose();
     } catch (err) {
