@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { getHistory, getFavorite, deleteHistory, removeFavorite, clearHistory } from "../service/recipeService.js"; 
 import "../style/List.css";
-import { AuthContext } from "../contexts/authContext.jsx";
+import { AuthContext } from "../context/authContext.jsx";
 
-export const List = ({ type, onClose }) => { 
+export const List = ({ type, onClose, onRecipeClick }) => { 
     const [items, setItems] = useState([]);
     const [showRecipe, setShowRecipe] = useState(false);
     const { loading, setLoading } = useContext(AuthContext);
@@ -56,7 +56,10 @@ export const List = ({ type, onClose }) => {
     };
 
     const handleRecipeClick = (recipe) => {
-        onRecipeClick(recipe); 
+        if (onRecipeClick) { 
+            onRecipeClick(recipe);
+            onClose(); 
+        }
     };
     
     const extractTitle = (text = "") => {
@@ -114,19 +117,19 @@ export const List = ({ type, onClose }) => {
                                         {new Date(item.createdAt || item.date).toLocaleDateString()}
                                     </p>
                                 </div>
-                                { type==="history" && (
-                                    <div className="item-actions">
-                                        <button 
-                                            className="delete-btn" 
-                                            onClick={(e) => {
-                                                e.stopPropagation(); 
-                                                handleDelete(item._id);
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div> 
-                                )}
+                                
+                                <div className="item-actions">
+                                    <button 
+                                        className="delete-btn" 
+                                        onClick={(e) => {
+                                            e.stopPropagation(); 
+                                            handleDelete(item._id);
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                </div> 
+                                
                             </div>
                         ))}
                     </div>

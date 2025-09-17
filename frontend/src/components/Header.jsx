@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../contexts/authContext";
+import { AuthContext } from "../context/authContext.jsx";
 import "../style/Header.css";
 
 export const Header = ({ handleFavorites, handleHistory, handleLogin, handleRegister }) => {

@@ -4,7 +4,7 @@ import { ClaudeRecipe } from "./ClaudeRecipe.jsx";
 import { IngredientsLists } from "./IngredientsList.jsx";
 import { getRecipeFromMistral } from "../utils/ai.js";
 import { addToFavorite, addToHistory } from "../service/recipeService.js";
-import { AuthContext } from "../contexts/authContext.jsx";
+import { AuthContext } from "../context/authContext.jsx";
 
 export const Main = () => {
     const [ingredients, setIngredient] = useState([]);
@@ -122,7 +122,7 @@ export const Main = () => {
                 </form>
                 {ingredients.length > 0 && <IngredientsLists ingredients={ingredients} handleClick={getRecipe}/>}
                 {recipe && (
-                    <div className="recipe-container">
+                    <>
                         <ClaudeRecipe recipe={recipe}/>
                         <div className="add-to-favorites">
                             <button
@@ -145,7 +145,7 @@ export const Main = () => {
                                  (isFavorited ? 'Added to Favorites' : 'Add to Favorites')}
                             </button>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </main>

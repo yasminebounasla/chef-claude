@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../contexts/authContext";
-import { Link } from "react-router-dom";
+import { AuthContext } from "../context/authContext.jsx";
 import '../style/Form.css'
 
 export const LoginForm = ({ onClose , handleRegister}) => {
@@ -13,7 +12,6 @@ export const LoginForm = ({ onClose , handleRegister}) => {
         const email = formData.get("email");
         const password = formData.get("password");
 
-        // Basic validation
         if (!email || !password) {
             setError("Please fill in all fields");
             return;
