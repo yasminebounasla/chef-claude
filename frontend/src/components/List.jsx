@@ -5,7 +5,6 @@ import { AuthContext } from "../context/authContext.jsx";
 
 export const List = ({ type, onClose, onRecipeClick }) => { 
     const [items, setItems] = useState([]);
-    const [showRecipe, setShowRecipe] = useState(false);
     const { loading, setLoading } = useContext(AuthContext);
 
     useEffect(() => {
@@ -19,7 +18,7 @@ export const List = ({ type, onClose, onRecipeClick }) => {
                     response = await getFavorite(); 
                 }
 
-                const itemsData = response.data || response;  
+                const itemsData = response.data;  
                 setItems(Array.isArray(itemsData) ? itemsData : []);
 
             } catch (error) {
