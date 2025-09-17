@@ -143,3 +143,33 @@
     .profile-actions { flex-direction: column; gap: 10px; }
     .profile-actions button { width: 100%; }
 }
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.profile-field .label {
+  font-weight: 500;
+  font-size: 15px;
+  color: #333;
+  margin-right: 12px;
+  min-width: 100px;
+}
+
+.profile-field input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-field input:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
