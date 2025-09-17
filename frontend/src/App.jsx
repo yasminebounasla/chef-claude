@@ -7,6 +7,7 @@ import { LoginForm } from './components/loginForm.jsx';
 import { RegisterForm } from './components/registerForm.jsx';
 import { AuthContext } from './context/authContext.jsx';
 import { Recipe } from './components/Recipe.jsx';
+import { Profile } from './components/Profile.jsx';
 
 function App() {
   const [showFavorites, setShowFavorites] = useState(false);
@@ -14,6 +15,7 @@ function App() {
   const [showLoginForm, setShowLoginForm] = useState(false); 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null); 
+  const [showProfile, setShowProfile] = useState(false);
 
   const { isAuthenticated } = useContext(AuthContext);
 
@@ -31,12 +33,15 @@ function App() {
     setShowFavorites(false);
     setShowHistory(false);
     setShowRegisterForm(false);
+    setShowProfile(false);
   };
 
   const handleRegister = () => {
     setShowRegisterForm(true);
     setShowFavorites(false);
     setShowLoginForm(false);
+    setShowHistory(false);
+    setShowProfile(false);
   };
 
   const handleFavorites = () => {
@@ -44,6 +49,7 @@ function App() {
     setShowHistory(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
+    setShowProfile(false);
   };
 
   const handleHistory = () => {
@@ -51,6 +57,7 @@ function App() {
     setShowFavorites(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
+    setShowProfile(false);
   };
 
   const close = () => {
@@ -58,7 +65,16 @@ function App() {
     setShowHistory(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
+    setShowProfile(false);
   };
+
+  const handleProfile = () => {
+    setShowProfile(true);
+    setShowFavorites(false);
+    setShowHistory(false);
+    setShowLoginForm(false);
+    setShowRegisterForm(false);
+  }
 
   
 
@@ -69,9 +85,11 @@ function App() {
         handleHistory={handleHistory} 
         handleLogin={handleLogin}
         handleRegister={handleRegister}
+        handleProfile={handleProfile}
       />
       <Main />
 
+      {showProfile && <Profile onClose={close}/>}
       {showLoginForm && <LoginForm onClose={close} handleRegister={handleRegister}/>}
       {showHistory && <List type="history" onClose={close} onRecipeClick={setSelectedRecipe}/>}
       {showFavorites && <List type="favorite" onClose={close} onRecipeClick={setSelectedRecipe}/>} 
