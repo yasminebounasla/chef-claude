@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { getProfile, editprofile } from "../service/userService";
+import { getProfile, editprofile, deleteProfile } from "../service/userService";
 import { AuthContext } from "../context/authContext";
 import "../style/Profile.css";
 
@@ -8,6 +8,9 @@ export const Profile = ({ onClose, onChangePassword }) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteError, setDeleteError] = useState("");
   const { loading, setLoading } = useContext(AuthContext);
 
   // fetch profile on mount
@@ -49,7 +52,7 @@ export const Profile = ({ onClose, onChangePassword }) => {
     setLoading(true);
     try {
       const updated = await editprofile(formData.name, formData.email);
-      const updatedProfile = updated?.data?.user ?? updated?.data ?? updated;
+      const updatedProfile = updated.data;
 
       setProfile(updatedProfile);
       setFormData({
@@ -71,6 +74,42 @@ export const Profile = ({ onClose, onChangePassword }) => {
       email: profile?.email ?? ""
     });
     setIsEditing(false);
+  };
+
+  // Show delete confirmation modal
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+    setDeletePassword("");
+    setDeleteError("");
+  };
+
+  // Cancel delete
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setDeletePassword("");
+    setDeleteError("");
+  };
+
+  // Confirm delete with password
+  const handleDeleteConfirm = async () => {
+    if (!deletePassword.trim()) {
+      setDeleteError("Please enter your password");
+      return;
+    }
+
+    setLoading(true);
+    setDeleteError("");
+    
+    try {
+      await deleteProfile(deletePassword);
+      alert("Your account has been deleted.");
+      onClose();
+    } catch (err) {
+      console.error("deleteProfile error:", err);
+      setDeleteError("Incorrect password or failed to delete account");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -162,19 +201,29 @@ export const Profile = ({ onClose, onChangePassword }) => {
                   </>
                 ) : (
                   <>
+                    <div className="action-buttons">
+                      <button
+                        className="primary-btn"
+                        onClick={handleEditClick}
+                        disabled={loading || !profile}
+                      >
+                        Edit Profile
+                      </button>
+                      <button
+                        className="secondary-btn"
+                        onClick={onChangePassword}
+                        disabled={loading}
+                      >
+                        Change Password
+                      </button>
+                    </div>
+
                     <button
-                      className="primary-btn"
-                      onClick={handleEditClick}
-                      disabled={loading || !profile}
-                    >
-                      Edit Profile
-                    </button>
-                    <button
-                      className="secondary-btn"
-                      onClick={onChangePassword}
+                      className="delete-btn"
+                      onClick={handleDeleteClick}
                       disabled={loading}
                     >
-                      Change Password
+                      Delete Account
                     </button>
                   </>
                 )}
@@ -183,6 +232,59 @@ export const Profile = ({ onClose, onChangePassword }) => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="delete-modal-overlay" onClick={handleDeleteCancel}>
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="delete-modal-header">
+              <h3>Delete Account</h3>
+              <button className="close-btn" onClick={handleDeleteCancel}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="delete-modal-content">
+              <p className="delete-warning">
+                This action cannot be undone. Please enter your password to confirm account deletion.
+              </p>
+              
+              {deleteError && <div className="delete-error">{deleteError}</div>}
+              
+              <div className="delete-password-field">
+                <label>Enter your password:</label>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder="Your current password"
+                  onKeyDown={(e) => e.key === 'Enter' && handleDeleteConfirm()}
+                />
+              </div>
+              
+              <div className="delete-modal-actions">
+                <button 
+                  className="delete-confirm-btn" 
+                  onClick={handleDeleteConfirm}
+                  disabled={loading || !deletePassword.trim()}
+                >
+                  {loading ? "Deleting..." : "Delete Account"}
+                </button>
+                <button 
+                  className="delete-cancel-btn" 
+                  onClick={handleDeleteCancel}
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
