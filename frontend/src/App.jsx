@@ -5,15 +5,14 @@ import { Main } from './components/Main.jsx';
 import { List } from './components/List.jsx';
 import { LoginForm } from './components/loginForm.jsx';
 import { RegisterForm } from './components/registerForm.jsx';
-import { AuthContext } from './contexts/authContext.jsx';
-import { ClaudeRecipe } from './components/ClaudeRecipe.jsx';
+import { AuthContext } from './context/authContext.jsx';
+import { Recipe } from './components/Recipe.jsx';
 
 function App() {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false); 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
-
   const [selectedRecipe, setSelectedRecipe] = useState(null); 
 
   const { isAuthenticated } = useContext(AuthContext);
@@ -61,6 +60,8 @@ function App() {
     setShowRegisterForm(false);
   };
 
+  
+
   return (
     <div className="app">
       <Header 
@@ -76,7 +77,9 @@ function App() {
       {showFavorites && <List type="favorite" onClose={close} onRecipeClick={setSelectedRecipe}/>} 
       {showRegisterForm && <RegisterForm onClose={close} handleLogin={handleLogin} />}
 
-      {selectedRecipe && <ClaudeRecipe recipe={selectedRecipe} />}
+      {selectedRecipe && (
+        <Recipe recipe={selectedRecipe} closeRecipe={() => setSelectedRecipe(null)}/>
+      )}
     </div>
   )
 }
