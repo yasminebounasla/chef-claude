@@ -48,7 +48,7 @@ export const Profile = ({ onClose, onChangePassword }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const updated = await editprofile(formData);
+      const updated = await editprofile(formData.name, formData.email);
       const updatedProfile = updated?.data?.user ?? updated?.data ?? updated;
 
       setProfile(updatedProfile);
@@ -65,7 +65,6 @@ export const Profile = ({ onClose, onChangePassword }) => {
     }
   };
 
-  // cancel editing (reset form values)
   const handleCancel = () => {
     setFormData({
       name: profile?.name ?? "",
