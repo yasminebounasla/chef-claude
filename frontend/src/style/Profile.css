@@ -57,9 +57,17 @@
     transition: all 0.2s ease;
 }
 
-.close-btn:hover { background-color: #f3f4f6; }
-.close-btn svg { color: #666; }
-.close-btn:hover svg { color: #333; }
+.close-btn:hover { 
+    background-color: #f3f4f6; 
+}
+
+.close-btn svg { 
+    color: #666; 
+}
+
+.close-btn:hover svg { 
+    color: #333; 
+}
 
 .profile-content {
     padding: 24px;
@@ -74,7 +82,9 @@
     color: #666;
 }
 
-.error { color: #ff4d4f; }
+.error { 
+    color: #ff4d4f; 
+}
 
 .profile-card {
     background: #f9fafb;
@@ -91,85 +101,348 @@
 
 .profile-field {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 8px 0;
-}
-
-.profile-field .label { font-weight: 500; color: #555; }
-.profile-field .value { color: #111827; }
-
-.profile-actions {
-    display: flex;
-    gap: 10xp; 
-    margin-top: 20px;
-    justify-content: space-between;
-}
-
-.profile-actions .primary-btn,
-.profile-actions .secondary-btn {
-    width : 47%;
-    padding: 12px 0;
-    font-weight: 500;
-    border-radius: 5px;
-}
-
-/* SignIn-btn style (primary) */
-.profile-actions .primary-btn {
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-    box-shadow: 1px 1px 10px rgb(186, 186, 186);
-}
-
-.profile-actions .primary-btn:hover {
-    background-color: rgb(28, 28, 28);
-    box-shadow: 2px 2px 8px rgb(133, 133, 133);
-}
-
-/* SignUp-btn style (secondary) */
-.profile-actions .secondary-btn {
-    background-color: white;
-    color: black;
-    border: 1px solid rgb(102, 102, 102);
-}
-
-.profile-actions .secondary-btn:hover {
-    box-shadow: 1px 1px 8px rgb(191, 191, 191);
-}
-
-
-@media (max-width: 480px) {
-    .profile-container { width: 100%; max-height: calc(100vh - 20px); }
-    .profile-actions { flex-direction: column; gap: 10px; }
-    .profile-actions button { width: 100%; }
-}
-
-.profile-field {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .profile-field .label {
-  font-weight: 500;
-  font-size: 15px;
-  color: #333;
-  margin-right: 12px;
-  min-width: 100px;
+    font-weight: 500;
+    font-size: 15px;
+    color: #333;
+    margin-right: 12px;
+    min-width: 100px;
+}
+
+.profile-field .value { 
+    color: #111827; 
 }
 
 .profile-field input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-field input:focus {
-  border-color: #000;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Profile Actions Container */
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Container for Edit + Change Password buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Style for Edit and Change Password buttons */
+.action-buttons .primary-btn,
+.action-buttons .secondary-btn {
+    flex: 1;
+    width: 100%;
+    padding: 12px 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+/* Primary button (Edit Profile) */
+.action-buttons .primary-btn {
+    background-color: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.action-buttons .primary-btn:hover:not(:disabled) {
+    background-color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary button (Change Password) */
+.action-buttons .secondary-btn {
+    background-color: white;
+    color: #000;
+    border: 1px solid #666;
+}
+
+.action-buttons .secondary-btn:hover:not(:disabled) {
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Delete button */
+.delete-btn {
+    background-color: #fff5f5;
+    color: #d32f2f;
+    border: 1px solid #f1c0c0;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    font-size: 14px;
+}
+
+.delete-btn:hover:not(:disabled) {
+    background-color: #ffe2e2;
+    color: #b71c1c;
+    border-color: #e6a3a3;
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.1);
+}
+
+.delete-btn:disabled,
+.action-buttons .primary-btn:disabled,
+.action-buttons .secondary-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Save/Cancel buttons when editing */
+.profile-actions .primary-btn:not(.action-buttons .primary-btn),
+.profile-actions .secondary-btn:not(.action-buttons .secondary-btn) {
+    flex: 1;
+    padding: 12px 0;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* When in editing mode, show Save/Cancel side by side */
+.profile-actions:has(.primary-btn:not(.action-buttons *)) {
+    flex-direction: row;
+    gap: 12px;
+}
+
+.profile-actions:has(.primary-btn:not(.action-buttons *)) .primary-btn {
+    background-color: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.profile-actions:has(.primary-btn:not(.action-buttons *)) .primary-btn:hover:not(:disabled) {
+    background-color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-actions:has(.secondary-btn:not(.action-buttons *)) .secondary-btn {
+    background-color: white;
+    color: #000;
+    border: 1px solid #666;
+}
+
+.profile-actions:has(.secondary-btn:not(.action-buttons *)) .secondary-btn:hover:not(:disabled) {
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .profile-container { 
+        width: 100%; 
+        max-height: calc(100vh - 20px); 
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .action-buttons .primary-btn,
+    .action-buttons .secondary-btn {
+        width: 100%;
+    }
+    
+    .delete-btn {
+        width: 100%;
+    }
+    
+    .profile-actions:has(.primary-btn:not(.action-buttons *)) {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .profile-actions:has(.primary-btn:not(.action-buttons *)) .primary-btn,
+    .profile-actions:has(.secondary-btn:not(.action-buttons *)) .secondary-btn {
+        width: 100%;
+    }
+}
+
+/* Delete Modal Styles */
+.delete-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1001; 
+    animation: fadeIn 0.3s ease-out;
+}
+
+.delete-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+    border: 2px solid #fee;
+}
+
+.delete-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #fee;
+    background: #fff8f8;
+    border-radius: 14px 14px 0 0;
+}
+
+.delete-modal-header h3 {
+    margin: 0;
+    color: #d32f2f;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.delete-modal-content {
+    padding: 24px;
+}
+
+.delete-warning {
+    color: #666;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+.delete-error {
+    background: #ffeaea;
+    color: #d32f2f;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #f8d7d7;
+    font-size: 14px;
+}
+
+.delete-password-field {
+    margin-bottom: 24px;
+}
+
+.delete-password-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.delete-password-field input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.delete-password-field input:focus {
+    border-color: #d32f2f;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.delete-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.delete-confirm-btn {
+    background: #d32f2f;
+    color: white;
+    border: 1px solid #d32f2f;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.delete-confirm-btn:hover:not(:disabled) {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.2);
+}
+
+.delete-confirm-btn:disabled {
+    background: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.delete-cancel-btn {
+    background: white;
+    color: #666;
+    border: 1px solid #ddd;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.delete-cancel-btn:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #bbb;
+    color: #333;
+}
+
+.delete-cancel-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Mobile responsiveness for delete modal */
+@media (max-width: 480px) {
+    .delete-modal {
+        margin: 20px;
+        max-width: none;
+        width: calc(100% - 40px);
+    }
+    
+    .delete-modal-actions {
+        flex-direction: column-reverse;
+    }
+    
+    .delete-confirm-btn,
+    .delete-cancel-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
