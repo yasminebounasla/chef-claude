@@ -1,11 +1,8 @@
-/* Add these styles to your CSS file */
-
 .app {
     position: relative;
     min-height: 100vh;
 }
 
-/* List Overlay - Full screen with blur effect */
 .list-overlay {
     position: fixed;
     top: 0;
@@ -132,17 +129,17 @@
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .item-card:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .item-info {
     flex: 1;
+    pointer-events: none; 
 }
 
 .item-name {
@@ -165,23 +162,62 @@
 }
 
 .delete-btn {
-    background: #ef4444;
-    color: white;
-    border: none;
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
     cursor: pointer;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.2s ease;
 }
 
 .delete-btn:hover {
-    background: #dc2626;
+    background: #fff7f7;
+    border-color: #ff8282;
     transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Design */
+.delete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.clear-btn {
+    margin: 20px auto 24px auto;
+    display: block;
+    padding: 12px 24px;
+    background: #f9fafb;
+    color: #252b35;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.clear-btn:hover {
+    background: #fff7f7;
+    border-color: #ff8282;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.clear-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.clear-btn::before {
+    content: "🗑️";
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .list-overlay {
         padding: 10px;
@@ -211,6 +247,11 @@
     .item-actions {
         margin-left: 12px;
     }
+    
+    .clear-btn {
+        margin: 16px auto 20px auto;
+        padding: 10px 20px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -224,22 +265,9 @@
         margin-left: 0;
         align-self: flex-end;
     }
-}
-
-.clear-btn {
-  margin: 15px auto;
-  display: block;
-  padding: 10px 18px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.clear-btn:hover {
-  background-color: #d93636;
+    
+    .delete-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
 }
