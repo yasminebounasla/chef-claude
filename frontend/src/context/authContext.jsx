@@ -51,6 +51,34 @@ export const AuthProvider = ({children}) => {
         checkAuth();
     }, []);
 
+    const getErrorMessage = (error) => {
+        console.log("Full error object:", error);
+        console.log("Error response:", error.response);
+        console.log("Error response data:", error.response?.data);
+        
+        if (error.response?.data) {
+            const errorData = error.response.data;
+            
+            if (errorData.errors && Array.isArray(errorData.errors) && errorData.errors.length > 0) {
+                return errorData.errors[0].message;
+            }
+            
+            if (errorData.message) {
+                return errorData.message;
+            }
+        }
+        
+        if (error.data?.errors && Array.isArray(error.data.errors) && error.data.errors.length > 0) {
+            return error.data.errors[0].message;
+        }
+        
+        if (error.data?.message) {
+            return error.data.message;
+        }
+        
+        return error.message || "An unexpected error occurred";
+    };
+
     // Login function
     const login = async (email, password) => {
         setLoading(true);
@@ -83,7 +111,7 @@ export const AuthProvider = ({children}) => {
 
         } catch (err) {
             console.error("Login error:", err);
-            const errorMessage = err.response?.data?.message || err.message || "Login failed";
+            const errorMessage = getErrorMessage(err);
             return { success: false, message: errorMessage };
         } finally {
             setLoading(false);
@@ -122,7 +150,7 @@ export const AuthProvider = ({children}) => {
 
         } catch(err) {
             console.error("Registration error:", err);
-            const errorMessage = err.response?.data?.message || err.message || "Registration failed";
+            const errorMessage = getErrorMessage(err);
             return { success: false, message: errorMessage };
         } finally {
             setLoading(false);

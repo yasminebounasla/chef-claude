@@ -61,22 +61,29 @@ export const List = ({ type, onClose, onRecipeClick }) => {
         }
     };
     
+    // ✅ Extract first line + shorten to 20 chars max
     const extractTitle = (text = "") => {
-        if (!text) return "Untitled Recipe";
+    if (!text) return "Untitled Recipe";
 
-        const ingIndex = text.indexOf("Ingredients");
-        let title = ingIndex > 0 
-            ? text.slice(0, ingIndex).trim().split("\n").pop()
-            : text.split("\n").find(line => line.trim() !== "") || "";
+    const lines = text.split("\n").map(line => line.trim()).filter(Boolean);
+    if (lines.length === 0) return "Untitled Recipe";
 
-        title = title.replace(/[*#_`>~]/g, "").trim();
+    // Take the very first meaningful line
+    let title = lines[0].replace(/[*#_`>~]/g, "").trim();
 
-        if (title.length > 0) {
-            title = title.charAt(0).toUpperCase() + title.slice(1);
-        }
+    // Capitalize first letter
+    if (title.length > 0) {
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+    }
 
-        return title || "Untitled Recipe";
-    };
+    // Cut to 100 chars max
+    if (title.length > 100) {
+        title = title.slice(0, 100) + "...";
+    }
+
+    return title || "Untitled Recipe";
+};
+
 
     return (
         <div className="list-overlay" onClick={onClose}>

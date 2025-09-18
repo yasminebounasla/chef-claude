@@ -8,6 +8,7 @@ import { RegisterForm } from './components/registerForm.jsx';
 import { AuthContext } from './context/authContext.jsx';
 import { Recipe } from './components/Recipe.jsx';
 import { Profile } from './components/Profile.jsx';
+import { ChangePassword } from './components/changePassword.jsx';
 
 function App() {
   const [showFavorites, setShowFavorites] = useState(false);
@@ -16,6 +17,7 @@ function App() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null); 
   const [showProfile, setShowProfile] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false)
 
   const { isAuthenticated } = useContext(AuthContext);
 
@@ -34,6 +36,7 @@ function App() {
     setShowHistory(false);
     setShowRegisterForm(false);
     setShowProfile(false);
+    setShowPasswordForm(false);
   };
 
   const handleRegister = () => {
@@ -42,6 +45,7 @@ function App() {
     setShowLoginForm(false);
     setShowHistory(false);
     setShowProfile(false);
+    setShowPasswordForm(false);
   };
 
   const handleFavorites = () => {
@@ -50,6 +54,7 @@ function App() {
     setShowLoginForm(false);
     setShowRegisterForm(false);
     setShowProfile(false);
+    setShowPasswordForm(false);
   };
 
   const handleHistory = () => {
@@ -58,6 +63,7 @@ function App() {
     setShowLoginForm(false);
     setShowRegisterForm(false);
     setShowProfile(false);
+    setShowPasswordForm(false);
   };
 
   const close = () => {
@@ -68,15 +74,27 @@ function App() {
     setShowProfile(false);
   };
 
+  const closePasswordForm = () => {
+    setShowPasswordForm(false);
+  }
+
   const handleProfile = () => {
     setShowProfile(true);
     setShowFavorites(false);
     setShowHistory(false);
     setShowLoginForm(false);
     setShowRegisterForm(false);
+    setShowPasswordForm(false);
   }
-
   
+  const handlePasswordForm = () => {
+    setShowPasswordForm(true);
+    setShowProfile(true);
+    setShowFavorites(false);
+    setShowHistory(false);
+    setShowLoginForm(false);
+    setShowRegisterForm(false);
+  }
 
   return (
     <div className="app">
@@ -87,17 +105,15 @@ function App() {
         handleRegister={handleRegister}
         handleProfile={handleProfile}
       />
-      <Main />
+      <Main handleLogin={handleLogin}/>
 
-      {showProfile && <Profile onClose={close}/>}
+      {showProfile && <Profile onClose={close} onChangePassword={handlePasswordForm}/> }
       {showLoginForm && <LoginForm onClose={close} handleRegister={handleRegister}/>}
       {showHistory && <List type="history" onClose={close} onRecipeClick={setSelectedRecipe}/>}
       {showFavorites && <List type="favorite" onClose={close} onRecipeClick={setSelectedRecipe}/>} 
       {showRegisterForm && <RegisterForm onClose={close} handleLogin={handleLogin} />}
-
-      {selectedRecipe && (
-        <Recipe recipe={selectedRecipe} closeRecipe={() => setSelectedRecipe(null)}/>
-      )}
+      {selectedRecipe && <Recipe recipe={selectedRecipe} closeRecipe={() => setSelectedRecipe(null)}/>}
+      {showPasswordForm && <ChangePassword onClose={closePasswordForm}/> }
     </div>
   )
 }

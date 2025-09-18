@@ -513,3 +513,11 @@ ol > li {
         padding: 14px 24px;
     }
 }
+
+.loading-text {
+  font-size: 1.2rem;
+  font-weight: medium;
+  text-align: center;
+  color: #6B7280;
+  margin-top: 15px;
+}

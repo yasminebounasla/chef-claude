@@ -30,13 +30,11 @@ export const Main = ({handleLogin}) => {
         const formData = new FormData(e.target);
         const newIngredient = formData.get("ingredient");
         
-        // Validate ingredient is not empty or just whitespace
         if (!newIngredient || newIngredient.trim() === "") {
             setError("Please enter a valid ingredient");
             return;
         }
         
-        // Check if ingredient already exists (case-insensitive)
         if (ingredients.some(ingredient => 
             ingredient.toLowerCase().trim() === newIngredient.toLowerCase().trim()
         )) {
@@ -44,15 +42,11 @@ export const Main = ({handleLogin}) => {
             return;
         }
         
-        // Clear any existing error
         setError("");
-       
         setIngredient((prevIngr) => [
             ...prevIngr,
             newIngredient.trim()
         ]);
-        
-        // Clear the input field
         e.target.reset();
     };
     
@@ -66,13 +60,14 @@ export const Main = ({handleLogin}) => {
     // Function to clear recipe and start fresh
     const clearRecipe = () => {
         setRecipe("");
-        setIngredient([]); // Clear all ingredients too
+        setIngredient([]);
         setIsFavorited(false);
         setError("");
     };
    
     const getRecipe = async() => {
         setError(""); 
+        setLoading(true);
         try {
             const generatedRecipe = await getRecipeFromMistral(ingredients);
             setRecipe(generatedRecipe);
@@ -82,6 +77,8 @@ export const Main = ({handleLogin}) => {
         } catch (error) {
             console.error('Error generating recipe:', error);
             setError('Failed to generate recipe. Please try again.');
+        } finally {
+            setLoading(false);
         }
     }
     
@@ -224,7 +221,7 @@ export const Main = ({handleLogin}) => {
                             />
                         )}
                         
-                        {recipe && (
+                        {recipe && !loading && (
                             <>
                                 <ClaudeRecipe recipe={recipe}/>
                                 <div className="recipe-actions">
@@ -272,6 +269,8 @@ export const Main = ({handleLogin}) => {
                                 </div>
                             </>
                         )}
+                        {loading && <p className="loading-text">Loading recipe...</p>}
+
                     </>
                 )}
             </div>
