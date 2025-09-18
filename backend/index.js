@@ -48,7 +48,7 @@ app.use("/api/auth", authRouter);
 if (process.env.SERVE_FRONTEND === "true") {
   const staticPath = path.join(process.cwd(), "frontend", "dist");
   app.use(express.static(staticPath));
-  app.get("*", (req, res) => {
+  app.get("/*", (req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 }
