@@ -2,26 +2,28 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../context/authContext.jsx";
 import '../style/Form.css'
 
-export const LoginForm = ({ onClose , handleRegister}) => {
+export const LoginForm = ({ onClose, handleRegister }) => {
     const { login, loading } = useContext(AuthContext);
     const [error, setError] = useState("");
-
-    const handleLogin = async (formData) => {
+    
+    const handleLogin = async (e) => {
+        e.preventDefault();
         setError("");
-        
+       
+        const formData = new FormData(e.target);
         const email = formData.get("email");
         const password = formData.get("password");
-
+        
         if (!email || !password) {
             setError("Please fill in all fields");
             return;
         }
-
+        
         try {
             const result = await login(email, password);
-            
+           
             if (result.success) {
-                onClose(); 
+                onClose();
             } else {
                 setError(result.message);
             }
@@ -30,8 +32,7 @@ export const LoginForm = ({ onClose , handleRegister}) => {
             console.error("Login form error:", err);
         }
     };
-    
-
+   
     return (
         <div className="list-overlay" onClick={onClose}>
             <div className="list-container login-form-container" onClick={(e) => e.stopPropagation()}>
@@ -44,9 +45,9 @@ export const LoginForm = ({ onClose , handleRegister}) => {
                         </svg>
                     </button>
                 </div>
-                
+               
                 <div className="list-content">
-                    <form className="login-form" action={handleLogin}>
+                    <form className="login-form" onSubmit={handleLogin}>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <input
@@ -56,10 +57,10 @@ export const LoginForm = ({ onClose , handleRegister}) => {
                                 placeholder="Enter your email..."
                                 disabled={loading}
                                 required
-                                onChange={() => error && setError("")} 
+                                onChange={() => error && setError("")}
                             />
                         </div>
-                        
+                       
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <input
@@ -69,24 +70,24 @@ export const LoginForm = ({ onClose , handleRegister}) => {
                                 placeholder="Enter your password..."
                                 disabled={loading}
                                 required
-                                onChange={() => error && setError("")} 
+                                onChange={() => error && setError("")}
                             />
                         </div>
-
+                        
                         {error && (
                             <div className="error-message">
                                 {error}
                             </div>
                         )}
-                        
-                        <button 
-                            type="submit" 
+                       
+                        <button
+                            type="submit"
                             className="login-submit-btn"
                             disabled={loading}
                         >
                             {loading ? "Signing In..." : "Sign In"}
                         </button>
-                        
+                       
                         <p className="signup-link">
                             Don't have an account?
                             <span className="link-text" onClick={handleRegister}>

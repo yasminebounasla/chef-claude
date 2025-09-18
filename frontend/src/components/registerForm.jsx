@@ -6,9 +6,11 @@ export const RegisterForm = ({ onClose, handleLogin }) => {
     const { register, loading } = useContext(AuthContext);
     const [error, setError] = useState("");
 
-    const handleRegister = async (formData) => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
         setError("");
         
+        const formData = new FormData(e.target);
         const email = formData.get("email");
         const password = formData.get("password");
         const confirmPassword = formData.get("confirmPassword");
@@ -48,7 +50,7 @@ export const RegisterForm = ({ onClose, handleLogin }) => {
                 </div>
                 
                 <div className="list-content">
-                    <form className="login-form" action={handleRegister}>
+                    <form className="login-form" onSubmit={handleRegister}>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <input
@@ -116,7 +118,7 @@ export const RegisterForm = ({ onClose, handleLogin }) => {
                         </button>
                         
                         <p className="signup-link">
-                            Don't have an account?
+                            Already have an account?
                             <span className="link-text" onClick={handleLogin}>
                                 Sign In
                             </span>
