@@ -1,7 +1,7 @@
 # Chef Claude 🍳
 > Chef Claude is a smart recipe generator web application that helps users discover delicious recipes based on available ingredients. Users can create accounts, generate personalized recipes, save favorites, manage recipe history, and customize their cooking experience with a comprehensive profile management system.
 
-![Chef Claude Screenshot](frontend/src/public/screenShot.png)
+![Chef Claude Screenshot](frontend/public/screenShot.png)
 
 ## ✨ Features
 
@@ -58,7 +58,6 @@ chef-claude/
 │   │   │   ├── Recipe.jsx
 │   │   │   ├── RegisterForm.jsx
 │   │   │   └── Header.jsx
-
 │   │   ├── context/          # React Context for state management
 │   │   │   └── authContext.jsx
 │   │   ├── service/          # API service functions
@@ -242,5 +241,6 @@ We welcome contributions to Chef Claude! Here's how you can help:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 **Happy Cooking! 🍳✨**
+
 
 > If you enjoy using Chef Claude, please give it a ⭐ on GitHub!
