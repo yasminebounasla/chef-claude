@@ -81,13 +81,20 @@ ol > li {
     margin-bottom: 8px;
 }
 
-/* Add to Favorites Button */
-.add-to-favorites {
+/* Recipe Actions Container */
+.recipe-actions {
     display: flex;
+    gap: 16px;
     justify-content: center;
+    align-items: center;
     margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid #e5e7eb;
+}
+
+/* Add to Favorites Button */
+.add-to-favorites {
+    display: flex;
 }
 
 .add-favorites-btn {
@@ -119,8 +126,6 @@ ol > li {
     color: #c22f2f;
 }
 
-/* Add these styles to your existing Main.css file */
-
 /* Favorited state */
 .add-favorites-btn.favorited {
     border-color: #c22f2f;
@@ -149,6 +154,80 @@ ol > li {
 
 .add-favorites-btn:active svg {
     transform: scale(1.1);
+}
+
+/* Clear Recipe Button - Matching your design style */
+.clear-recipe-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #6B7280;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    color: #FAFAF8;
+    padding: 12px 17px;
+    font-family: Inter, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clear-recipe-btn:hover {
+    background: #374151;
+}
+
+.clear-recipe-btn:disabled {
+    background: #9CA3AF;
+    cursor: not-allowed;
+}
+
+/* Ingredients List with Delete Buttons */
+.ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.ingredient-item:hover {
+    background: #F3F4F6;
+}
+
+.ingredient-text {
+    color: #475467;
+    line-height: 28px;
+    flex-grow: 1;
+}
+
+.delete-ingredient-btn {
+    background: #EF4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.delete-ingredient-btn:hover {
+    background: #DC2626;
+}
+
+.delete-ingredient-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 /* Error Display Styles */
@@ -402,6 +481,16 @@ ol > li {
     
     .cta-section h2 {
         font-size: 1.75rem;
+    }
+    
+    .recipe-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .clear-recipe-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 

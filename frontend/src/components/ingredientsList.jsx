@@ -1,3 +1,5 @@
+import "../style/Main.css"
+
 export const IngredientsLists = (props) => {
     return (
         <section>

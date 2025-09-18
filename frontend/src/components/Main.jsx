@@ -24,13 +24,51 @@ export const Main = ({handleLogin}) => {
         setShowHistory(true);
     }
    
-    const addIngredient = (formData) => {
+    const addIngredient = (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
         const newIngredient = formData.get("ingredient");
+        
+        // Validate ingredient is not empty or just whitespace
+        if (!newIngredient || newIngredient.trim() === "") {
+            setError("Please enter a valid ingredient");
+            return;
+        }
+        
+        // Check if ingredient already exists (case-insensitive)
+        if (ingredients.some(ingredient => 
+            ingredient.toLowerCase().trim() === newIngredient.toLowerCase().trim()
+        )) {
+            setError("This ingredient is already added");
+            return;
+        }
+        
+        // Clear any existing error
+        setError("");
        
         setIngredient((prevIngr) => [
             ...prevIngr,
-            newIngredient
+            newIngredient.trim()
         ]);
+        
+        // Clear the input field
+        e.target.reset();
+    };
+    
+    // Function to delete a specific ingredient
+    const deleteIngredient = (indexToDelete) => {
+        setIngredient((prevIngr) => 
+            prevIngr.filter((_, index) => index !== indexToDelete)
+        );
+    };
+    
+    // Function to clear recipe and start fresh
+    const clearRecipe = () => {
+        setRecipe("");
+        setIngredient([]); // Clear all ingredients too
+        setIsFavorited(false);
+        setError("");
     };
    
     const getRecipe = async() => {
@@ -166,39 +204,70 @@ export const Main = ({handleLogin}) => {
 
                         <form
                             className="add-ingredient-form"
-                            action={addIngredient}
+                            onSubmit={addIngredient}
                         >
                             <input
                                 aria-label="Add ingredient"
                                 type="text"
                                 placeholder="e.g egg"
                                 name="ingredient"
+                                required
                             />
-                            <button>Add ingredient</button>
+                            <button type="submit">Add ingredient</button>
                         </form>
-                        {ingredients.length > 0 && <IngredientsLists ingredients={ingredients} handleClick={getRecipe}/>}
+                        
+                        {ingredients.length > 0 && (
+                            <IngredientsLists 
+                                ingredients={ingredients} 
+                                handleClick={getRecipe}
+                                onDeleteIngredient={deleteIngredient}
+                            />
+                        )}
+                        
                         {recipe && (
                             <>
                                 <ClaudeRecipe recipe={recipe}/>
-                                <div className="add-to-favorites">
+                                <div className="recipe-actions">
+                                    <div className="add-to-favorites">
+                                        <button
+                                            className={`add-favorites-btn ${isFavorited ? 'favorited' : ''}`}
+                                            onClick={handleAddToFavorites}
+                                            disabled={loading || !isAuthenticated}
+                                        >
+                                            <svg
+                                                width="18"
+                                                height="18"
+                                                viewBox="0 0 24 24"
+                                                fill={isFavorited ? "currentColor" : "none"}
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                            >
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                            </svg>
+                                            {loading ? 'Saving...' : 
+                                             !isAuthenticated ? 'Login to Save' :
+                                             (isFavorited ? 'Added to Favorites' : 'Add to Favorites')}
+                                        </button>
+                                    </div>
+                                    
                                     <button
-                                        className={`add-favorites-btn ${isFavorited ? 'favorited' : ''}`}
-                                        onClick={handleAddToFavorites}
-                                        disabled={loading || !isAuthenticated}
+                                        className="clear-recipe-btn"
+                                        onClick={clearRecipe}
+                                        disabled={loading}
                                     >
                                         <svg
-                                            width="18"
-                                            height="18"
+                                            width="16"
+                                            height="16"
                                             viewBox="0 0 24 24"
-                                            fill={isFavorited ? "currentColor" : "none"}
+                                            fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
                                         >
-                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                            <path d="M3 6h18"/>
+                                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                            <path d="M8 6V4c0-1 1-2 2-2h4c-1 0 2 1 2 2v2"/>
                                         </svg>
-                                        {loading ? 'Saving...' : 
-                                         !isAuthenticated ? 'Login to Save' :
-                                         (isFavorited ? 'Added to Favorites' : 'Add to Favorites')}
+                                        Clear All & Get New Recipe
                                     </button>
                                 </div>
                             </>
