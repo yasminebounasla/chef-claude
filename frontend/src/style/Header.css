@@ -1,38 +1,47 @@
 .header{
-    display:flex;
-    justify-content: space-around;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap :430px;
-    height : 90px;
+    padding: 0 30px;
+    height: 90px;
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06);
     background-color: white;
+    position: relative;
 }
+
 .header-icon {
-    width :45px;
+    width: 45px;
 }
+
 .header-title {
     font-weight: 500;
     font-size: 2.25rem;
 }
+
 .logo {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap :17px;
-    height : 90px;
-    align-content: center;
+    gap: 17px;
+    height: 90px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
+
 .btns{
-    display : flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap : 15px;
+    gap: 15px;
 }
+
 .btns > button {
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 0.85rem;
 }
+
 .signIn-btn {
     background-color: black;
     color: white;
@@ -42,10 +51,12 @@
     cursor: pointer;
     transition: all 0.3s;
 }
+
 .signIn-btn:hover {
     background-color: rgb(28, 28, 28);
     box-shadow: 2px 2px 8px rgb(133, 133, 133);
 }
+
 .signUp-btn {
     background-color: white;
     color: black;
@@ -54,6 +65,7 @@
     cursor: pointer;
     transition: all 0.3s;
 }
+
 .signUp-btn:hover {
     box-shadow: 1px 1px 8px rgb(191, 191, 191);
 }
@@ -62,6 +74,7 @@
 .menu-container {
     position: relative;
     cursor: pointer;
+    z-index: 10;
 }
 
 /* Hamburger Icon */
@@ -142,12 +155,12 @@
     color: #333;
 }
 
-
 /* Right Section */
 .right-section {
     display: flex;
     align-items: center;
     gap: 15px;
+    z-index: 10;
 }
 
 /* Avatar Circle */
@@ -239,7 +252,6 @@
     box-shadow: 1px 1px 8px rgb(191, 191, 191);
 }
 
-
 .dropdown-item.logout:hover {
   background-color: #ffecec;
   color: #d32f2f;           
@@ -248,4 +260,3 @@
 .dropdown-item.logout:hover .item-icon {
   color: #d32f2f;          
 }
-
