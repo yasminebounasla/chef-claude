@@ -42,28 +42,6 @@
 - Database indexing for performance
 - Modular code organization
 
-
-**Project Structures:**
-chef-claude/
-├── frontend/
-│   ├── src/
-│   │   ├── components/           # Reusable UI components
-│   │   ├── context/              # React Context for state management
-│   │   ├── service/              # API service functions
-│   │   ├── utils/                # Utility functions
-│   │   ├── style/                # CSS stylesheets
-│   │   └── assets/               # Static assets
-│   └── public/                   # Public assets
-├── backend/
-│   ├── controllers/              # Route controllers
-│   ├── middleware/               # Custom middleware
-│   ├── models/                   # Database models
-│   ├── routes/                   # API routes
-│   ├── utils/                    # Utility functions
-│   └── index.js                  # Server entry point
-└── README.md
-
-
 ## 📋 Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
@@ -213,4 +191,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 
 > If you enjoy using Chef Claude, please give it a ⭐ on GitHub!
+
 
