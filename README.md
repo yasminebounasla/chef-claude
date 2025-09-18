@@ -47,53 +47,22 @@
 chef-claude/
 ├── frontend/
 │   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   │   ├── changePassword.jsx
-│   │   │   ├── ClaudeRecipe.jsx
-│   │   │   ├── IngredientsList.jsx
-│   │   │   ├── List.jsx
-│   │   │   ├── Loginform.jsx
-│   │   │   ├── Main.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── Recipe.jsx
-│   │   │   ├── RegisterForm.jsx
-│   │   │   └── Header.jsx
-│   │   ├── context/          # React Context for state management
-│   │   │   └── authContext.jsx
-│   │   ├── service/          # API service functions
-│   │   │   ├── authService.js
-│   │   │   ├── recipeService.js
-│   │   │   └── userService.js
-│   │   ├── utils/            # Utility functions
-│   │   │   ├── api.js
-│   │   │   ├── auth.js
-│   │   │   └── api.js
-│   │   ├── style/            # CSS stylesheets
-│   │   └── assets/           # Static assets
-│   └── public/               # Public assets
+│   │   ├── components/           # Reusable UI components
+│   │   ├── context/              # React Context for state management
+│   │   ├── service/              # API service functions
+│   │   ├── utils/                # Utility functions
+│   │   ├── style/                # CSS stylesheets
+│   │   └── assets/               # Static assets
+│   └── public/                   # Public assets
 ├── backend/
-│   ├── controllers/          # Route controllers
-│   │   │   ├── authcontrollers.js
-│   │   │   └── recipeControllers.js
-│   ├── middleware/           # Custom middleware
-│   │   ├── auth.js          
-│   │   ├── errorHandler.js  
-│   │   ├── rateLimit.js     
-│   │   └── validateReq.js   
-│   ├── models/              # Database models
-│   │   ├── counterModel.js  
-│   │   ├── recipeModel.js   
-│   │   └── userModel.js     
-│   ├── routes/              # API routes
-│   │   ├── auth.js        
-│   │   └── recipe.js       
-│   ├── utils/               # Utility functions
-│   │   ├── AppError.js     
-│   │   ├── authValidator.js 
-│   │   ├── catchAsync.js   
-│   │   ├── response.js    
-│   │   └── validatePassword.js 
-│   └── index.js           
+│   ├── controllers/              # Route controllers
+│   ├── middleware/               # Custom middleware
+│   ├── models/                   # Database models
+│   ├── routes/                   # API routes
+│   ├── utils/                    # Utility functions
+│   └── index.js                  # Server entry point
+└── README.md
+
 
 ## 📋 Table of Contents
 - [Installation](#installation)
@@ -244,3 +213,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 
 > If you enjoy using Chef Claude, please give it a ⭐ on GitHub!
+
